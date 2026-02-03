@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
-import type { PokemonListResponse, PokemonListItem, Pokemon } from '../types/Pokemon';
+import type { Pokemon } from '../types/Pokemon';
+import type {PokemonListResponse, PokemonListItem, } from '../types/PokemonUtils'
 
 export function usePokemon(name?: string) {
-  const [pokemonList, setPokemonList] = useState<PokemonListItem[] | null>(null);
-  const [pokemon, setPokemon] = useState<Pokemon | null>(null);
+  const [pokemonList, setPokemonList] = useState<PokemonListItem[] | undefined>(undefined);
+  const [pokemon, setPokemon] = useState<Pokemon | undefined>(undefined);
 
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<Error | undefined>(undefined);
 
   const fetchAllPokemon = async () => {
     setLoading(true);
-    setError(null);
+    setError(undefined);
 
     try {
       const res = await fetch(
@@ -24,7 +25,7 @@ export function usePokemon(name?: string) {
       setPokemonList(list);
     } catch (err) {
       setError(err as Error);
-      setPokemonList(null);
+      setPokemonList(undefined);
     } finally {
       setLoading(false);
     }
@@ -32,14 +33,14 @@ export function usePokemon(name?: string) {
 
   useEffect(() => {
     if (!name) {
-      setPokemon(null);
+      setPokemon(undefined);
       return;
     }
     let cancelled = false;
     const fetchPokemonByName = async () => {
       setLoading(true);
-      setError(null);
-      setPokemon(null);
+      setError(undefined);
+      setPokemon(undefined);
       try {
         const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name.toLowerCase()}`);
         const data: Pokemon = await res.json();
@@ -47,7 +48,7 @@ export function usePokemon(name?: string) {
       } catch (err) {
         if (!cancelled) {
           setError(err as Error);
-          setPokemon(null);
+          setPokemon(undefined);
         }
       } finally {
         if (!cancelled) setLoading(false);

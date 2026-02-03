@@ -18,7 +18,7 @@ export function usePokemon() {
         const data: PokemonListResponse = await res.json();
         const list: PokemonListItem[] = data.results.map((item, index) => ({ // index es el índice de la lista para calcular el id
           ...item,
-          id: data.count + index,
+          id: index,
         }));
         setPokemon(list);
       } catch (err) {

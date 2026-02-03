@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { PokemonListResponse, PokemonListItem, Pokemon } from '../types/Pokemon';
 
 export function usePokemon(name?: string) {
-  const [pokemon, setPokemon] = useState<PokemonListItem[] | Pokemon | null>(null);
+  const [pokemonList, setPokemonList] = useState<PokemonListItem[] | null>(null);
+  const [pokemon, setPokemon] = useState<Pokemon | null>(null);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -19,38 +21,44 @@ export function usePokemon(name?: string) {
         ...item,
         id: index,
       }));
-      setPokemon(list);
+      setPokemonList(list);
     } catch (err) {
       setError(err as Error);
-      setPokemon(null);
+      setPokemonList(null);
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchPokemonByName = async (name : string) => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
-      const data: Pokemon = await res.json();
-      setPokemon(data);
-    }
-    catch (err) {
-      setError(err as Error);
+  useEffect(() => {
+    if (!name) {
       setPokemon(null);
+      return;
     }
-    finally {
-      setLoading(false);
-    }
-  }
-  
-  if(name){
-    fetchPokemonByName(name)
-  } else {
+    let cancelled = false;
+    const fetchPokemonByName = async () => {
+      setLoading(true);
+      setError(null);
+      setPokemon(null);
+      try {
+        const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name.toLowerCase()}`);
+        const data: Pokemon = await res.json();
+        if (!cancelled) setPokemon(data);
+      } catch (err) {
+        if (!cancelled) {
+          setError(err as Error);
+          setPokemon(null);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+    fetchPokemonByName();
+    return () => { cancelled = true; };
+  }, [name]);
+  useEffect(() => {
     fetchAllPokemon();
-  }
+  }, []);
 
-  return { pokemon, loading, error };
+  return { pokemon, pokemonList, loading, error };
 }

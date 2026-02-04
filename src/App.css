@@ -1,0 +1,7 @@
+.poke-item {
+  transition: box-shadow 0.25s ease;
+}
+
+.poke-item:hover {
+  box-shadow: 0 0 40px var(--type-current);
+}

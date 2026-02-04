@@ -11,7 +11,7 @@ export function TopBar() {
                 }}
                 className="flex items-center gap-2 no-underline text-inherit hover:opacity-80 transition-opacity"
             >
-                <img src={logo} alt="Logo Pokédex" className="h-8 w-auto object-contain invert" />
+                <img src={logo} alt="Logo Pokédex" className="h-8 w-auto object-contain" />
             </a>
         </header>
     )

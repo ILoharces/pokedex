@@ -17,7 +17,7 @@ export function usePokemon() {
 
     try {
       const res = await fetch(
-        `https://pokeapi.co/api/v2/pokemon?limit=1350&offset=0`
+        `https://pokeapi.co/api/v2/pokemon?limit=50&offset=0`
       );
       const data: PokemonListResponse = await res.json();
       const pokemonResponses = await Promise.all(

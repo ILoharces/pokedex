@@ -9,6 +9,7 @@
 body {
   font-family: 'Fredoka', sans-serif;
   background-color: #ffffff;
+  overflow-x: hidden;
 }
 
 h1 {

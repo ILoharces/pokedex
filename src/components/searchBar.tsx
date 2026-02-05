@@ -13,6 +13,7 @@ export function SearchBar({ setSearch }: SearchBarProps) {
     <div className="flex items-center gap-3 w-full min-w-0 h-12 px-4 rounded-xl bg-gray-50 border border-gray-200 shadow-sm focus-within:ring-2 focus-within:ring-blue-400 focus-within:border-blue-400 transition-shadow">
       <SearchIcon />
       <input
+        title="search bar"
         type="search"
         onChange={(e) => setSearch(e.target.value)}
         placeholder="Search for a pokemon"
